@@ -1,0 +1,13 @@
+{
+  "name": "chatapp",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Skynessthedark <qksnn.9@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Skynessthedark/chatApp",
+  "dependencies": {
+    "angular": "^1.8.2"
+  }
+}
