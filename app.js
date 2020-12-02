@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const RedisStore = require('./helpers/redisStore');
 const logger = require('morgan');
 const dotenv = require('dotenv');
 const passport = require('passport');
@@ -17,10 +16,11 @@ const app = express();
 
 //helpers
 const db = require('./helpers/db')();
+const redisStore = require('./helpers/redisStore');
 
 //middlewares
 const isAuthenticated = require('./middleware/isAuthenticated');
-const redisStore = require('./helpers/redisStore');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
