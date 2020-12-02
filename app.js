@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const RedisStore = require('./helpers/redisStore');
 const logger = require('morgan');
 const dotenv = require('dotenv');
 const passport = require('passport');
@@ -19,6 +20,7 @@ const db = require('./helpers/db')();
 
 //middlewares
 const isAuthenticated = require('./middleware/isAuthenticated');
+const redisStore = require('./helpers/redisStore');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'bower_components')));
 
 //express-session
 app.use(session({
+  store: redisStore,
   secret: process.env.SESSION_SECRET_KEY,
   resave: false,
   saveUninitialized: false,
