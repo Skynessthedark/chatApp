@@ -33,8 +33,7 @@ server.on('listening', onListening);
  * socket.io
  */
 const socketApi = require('../src/socketAPI');
-const io = socketApi.io;
-io.attach(server);
+socketApi.io.attach(server);
 
 /**
  * Normalize a port into a number, string, or false.
