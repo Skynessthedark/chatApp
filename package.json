@@ -25,6 +25,7 @@
     "passport.socketio": "^3.7.0",
     "pug": "^3.0.0",
     "redis": "^3.0.2",
+    "shortid": "^2.2.16",
     "socket.io": "^3.0.3",
     "socket.io-redis": "^6.0.1"
   }

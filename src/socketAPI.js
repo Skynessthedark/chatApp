@@ -9,6 +9,7 @@ const socketApi = {
 //libs
 const Users = require('./lib/Users');
 const Rooms = require('./lib/Rooms');
+const Messages = require('./lib/Messages');
 
 //Socket Authorization
 io.use(socketAuthorization);
@@ -25,14 +26,29 @@ io.adapter(redisAdapter({
 io.on('connection', socket =>{
     console.log('a user logged in with the name: ' + socket.request.user.name);
 
+    Rooms.list(rooms => {
+        io.emit('roomList', rooms);
+    });
+
     Users.upsert(socket.id, socket.request.user);
 
     Users.list(users => {
         io.emit('onlineList', users);
     });
 
+    socket.on('newMessage', message =>{
+        Messages.upsert({
+            ...message,
+            name: socket.request.user.name,
+            surname: socket.request.user.surname
+        })
+    });
+
     socket.on('newRoom', roomName =>{
         Rooms.upsert(roomName);
+        Rooms.list(rooms => {
+            io.emit('roomList', rooms);
+        });
     });
 
     socket.on('disconnect', ()=>{

@@ -19,7 +19,7 @@ passport.use(
         {
 			name: data.given_name,
 			surname: data.family_name,
-			profilePhotoUrl: data.picture.url + '0'
+			profilePhotoUrl: data.picture.url
         },
         (err, user) => {
 			return done(err, user);
