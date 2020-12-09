@@ -11,4 +11,14 @@ router.get('/', (req, res, next) => {
   }
 });
 
+/* GET users */
+router.get('/getUser', (req, res, next) => {
+  if(!req.user){
+    res.render('index');
+  }
+  else{
+    res.redirect('/chat');
+  }
+});
+
 module.exports = router;

@@ -23,7 +23,7 @@ Users.prototype.upsert = function (connectionId, meta) {
 	)
 };
 
-Users.prototype.remove = function (_id) {
+Users.prototype.remove = function(_id){
 	this.client.hdel(
 		'online',
 		_id,
@@ -32,13 +32,13 @@ Users.prototype.remove = function (_id) {
 				console.error(err);
 			}
 		}
-	);
+	)
 };
 
 Users.prototype.list = function (callback) {
 	let active = [];
 
-	this.client.hgetall('online', function (err, users) {
+	this.client.hgetall('online', (err, users) => {
 		if (err) {
 		  console.error(err);
 		  return callback([]);

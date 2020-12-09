@@ -1,4 +1,16 @@
-app.controller('chatController', ['$scope', ($scope)=>{
+app.controller('chatController', ['$scope', 'userFactory','chatFactory', ($scope, userFactory, chatFactory) => {
+	/**
+	 * initialization
+	 */
+
+	function init(){
+		userFactory.getUser().then(user => {
+			$scope.user = user;
+		})
+	}
+
+	init();
+    
     /**
      * ANGULAR VARIABLES
      */
@@ -10,6 +22,8 @@ app.controller('chatController', ['$scope', ($scope)=>{
     $scope.chatName = "";
     $scope.roomId = "";
     $scope.message = "";
+    $scope.messages = [];
+    $scope.user = {};
 
     /**
      * SOCKET EVENT HANDLING.
@@ -31,6 +45,10 @@ app.controller('chatController', ['$scope', ($scope)=>{
         $scope.chatClicked = true;
         $scope.roomId = room.id;
         $scope.chatName = room.name;
+
+        chatFactory.getMessages(room.id).then(data=>{
+            $scope.messages[room.id] = data;
+        });
     }
 
     $scope.newMessage = ()=>{
