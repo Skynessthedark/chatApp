@@ -21,6 +21,7 @@ app.controller('chatController', ['$scope', 'userFactory','chatFactory', ($scope
     $scope.chatClicked = false;
     $scope.chatName = "";
     $scope.roomId = "";
+    $scope.loadingMessages = false;
     $scope.message = "";
     $scope.messages = [];
     $scope.user = {};
@@ -36,8 +37,18 @@ app.controller('chatController', ['$scope', 'userFactory','chatFactory', ($scope
         $scope.$apply();
     });
 
-    socket.on('roomList', rooms=>{
+    socket.on('roomList', rooms =>{
         $scope.roomList = rooms;
+        $scope.$apply();
+    });
+
+    socket.on('receiveMessage', message =>{
+        $scope.messages[message.roomId].push({
+            userId: message.user._id,
+            name: message.user.name,
+            surname: message.user.surname,
+            message: message.message
+        });
         $scope.$apply();
     });
 
@@ -45,18 +56,35 @@ app.controller('chatController', ['$scope', 'userFactory','chatFactory', ($scope
         $scope.chatClicked = true;
         $scope.roomId = room.id;
         $scope.chatName = room.name;
+        $scope.loadingMessages = true;
 
-        chatFactory.getMessages(room.id).then(data=>{
+        if(!$scope.messages.hasOwnProperty(room.id)){
+            /**
+             * Servise bağlanıyor.
+             */
+            chatFactory.getMessages(room.id).then(data=>{
             $scope.messages[room.id] = data;
-        });
+            $scope.loadingMessages = false;
+            });
+        }
     }
 
     $scope.newMessage = ()=>{
-        socket.emit('newMessage', {
+        if($scope.message.trim() !== ''){
+            socket.emit('newMessage', {
             message: $scope.message,
             roomId: $scope.roomId
-        })
-        $scope.message = '';
+            })
+
+            $scope.messages[$scope.roomId].push({
+                userId: $scope.user._id,
+                name: $scope.user.name,
+                surname: $scope.user.surname,
+                message: $scope.message
+            });
+            $scope.message = '';
+        }
+        
     }
 
     $scope.newRoom = ()=>{

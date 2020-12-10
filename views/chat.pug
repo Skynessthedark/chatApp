@@ -25,7 +25,7 @@ block content
             .tab-right(ng-show="activeTab === 2")
               ul.people
                 li.person(ng-repeat="user in onlineList")
-                  img(ng-src= "{{  user.meta.profilePhotoUrl }}")
+                  img(ng-src= "{{  user.profilePhotoUrl }}")
                   span.name {{ user.meta.name }} {{ user.meta.surname }}
                   span.preview &nbsp;
           .bottom
@@ -34,13 +34,15 @@ block content
           .top
             span
               span.name {{ chatName }}
-          .chat.active-chat
+
+          .loading(ng-show = "loadingMessages") Loading...
+          .chat.active-chat(ng-show="!loadingMessages")
             .bubble(
               ng-repeat="data in messages[roomId]",
-              ng-class="{false: 'me', true: 'you'}[data.userId == user._id]")
+              ng-class="{false: 'you', true: 'me'}[data.userId == user._id]")
               span {{data.name}} {{data.surname}}
               | {{data.message}}
-          .write
+          .write(ng-show="!loadingMessages")
             form(ng-submit="newMessage()")
               input(type='text', ng-model="message")
               a.write-link.send(ng-click="newMessage()")
